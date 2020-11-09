@@ -8,4 +8,5 @@ import br.bancoEveris.app.model.Conta;
 @Repository
 public interface  ContaRepository extends JpaRepository<Conta, Long>{
 		
+		Conta findByHash(String hash);
 }

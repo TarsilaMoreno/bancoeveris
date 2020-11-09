@@ -1,7 +1,7 @@
 package br.bancoEveris.app.service;
 
-
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import br.bancoEveris.app.model.BaseResponse;
 import br.bancoEveris.app.model.Conta;
 import br.bancoEveris.app.repository.ContaRepository;
-import br.bancoEveris.app.spec.ContaList;
-import br.bancoEveris.app.spec.ContaSpec;
+import br.bancoEveris.app.request.ContaRequest;
+import br.bancoEveris.app.response.ListContaResponse;
+import br.bancoEveris.app.response.ContaResponse;
+
+import java.time.*;
 
 @Service
 public class ContaService {
@@ -25,94 +28,124 @@ public class ContaService {
 
 	}
 
-	public BaseResponse inserir(ContaSpec contaSpec) {
+	public BaseResponse inserir() {
 		Conta conta = new Conta();
 		BaseResponse base = new BaseResponse();
+		String randomHash = "";
+		// substituir por um randomHash correto
 
-		base.statusCode = 400;
+		boolean existe = true;
+		while (existe) {
+			randomHash = LocalDateTime.now().toString();
 
-		if (contaSpec.getHash() == "") {
-			base.message = "Nome do usuário não preenchido";
-			return base;
+			Conta checkConta = _repository.findByHash(randomHash);
+
+			if (checkConta == null)
+				existe = false;
 		}
-	
-		conta.setHash(contaSpec.getHash());
-		
+
+		conta.setHash(randomHash);
 
 		_repository.save(conta);
 		base.statusCode = 201;
 		base.message = "Conta cadastrada com sucesso";
 		return base;
 	}
-	
-	public ContaList obter() {
+
+	public ListContaResponse listar() {
 		List<Conta> contas = _repository.findAll();
-		
-		ContaList base = new ContaList();
+
+		ListContaResponse base = new ListContaResponse();
 		base.setContas(contas);
 		base.statusCode = 200;
 		base.message = "Contas obtidas com sucesso.";
 		return base;
 	}
-	
-	public Conta obterByHash(String hash) {
-		Conta conta = _repository.findByHash(hash);
-		
-//		verifica se contas está vazio
-		if(conta == null) {
-			conta = new Conta();
-			conta.statusCode = 400;
-			conta.message = "Hash não encontrado.";
-			return conta;
+
+	public ContaResponse obter(Long id) {
+		Optional<Conta> conta = _repository.findById(id);
+		ContaResponse response = new ContaResponse();
+
+		if (conta == null) {
+
+			response.statusCode = 400;
+			response.message = "Id não encontrado.";
+			return response;
 		}
-		conta.statusCode = 200;
-		conta.message = "Conta encontrada.";
-		return conta;
+
+		response.setId(conta.get().getId());
+		response.setHash(conta.get().getHash());
+		response.setSaldo(conta.get().getSaldo());
+
+		response.statusCode = 200;
+		response.message = "Conta encontrada.";
+		return response;
 	}
-	
-	
-	public Conta editar(String hash, ContaSpec contaSpec) {
-		Conta conta = _repository.findByHash(hash);
-		
-		if(contaSpec.getHash().isEmpty()) {
-			conta.statusCode = 400;
-			conta.message = "Hash não encontrado.";
-			return conta;
+
+	public BaseResponse editar(Long id, ContaRequest contaRequest) {
+		Optional<Conta> conta = _repository.findById(id);
+		BaseResponse base = new BaseResponse();
+		Conta request = new Conta();
+
+		if (conta.get().getId() == 0) {
+			base.statusCode = 400;
+			base.message = "Id não encontrado.";
+			return base;
 		}
-		
-		conta.setHash(contaSpec.getHash());
-		_repository.save(conta);
-		conta.statusCode = 200;
-		conta.message = "Conta atualizada.";
-		return conta;
-	}
-	
-	public BaseResponse deletar(String hash) {
-		Conta conta = _repository.findByHash(hash);
-		
-		if(hash.isEmpty()) {
-			conta.statusCode = 400;
-			conta.message = "Hash não encontrado.";
-			return conta;
+
+		if (contaRequest.getHash() == "") {
+			base.statusCode = 400;
+			base.message = "Hash não informada.";
+			return base;
 		}
-		
-		_repository.delete(conta);
-		conta.statusCode = 200;
-		conta.message = "Conta deletada.";
-		return conta;
+
+		Conta checkConta = _repository.findByHash(contaRequest.getHash());
+
+		if (checkConta != null) {
+			base.statusCode = 400;
+			base.message = "Hash indisponível.";
+			return base;
+		}
+
+		request.setId(id);
+		request.setHash(contaRequest.getHash());
+
+		_repository.save(request);
+		base.statusCode = 200;
+		base.message = "Conta atualizada.";
+		return base;
 	}
-	
-	public Conta saldo(String hash) {
-		Conta response = new Conta();
-		
+
+	public BaseResponse deletar(Long id) {
+		Optional<Conta> conta = _repository.findById(id);
+
+		BaseResponse base = new BaseResponse();
+
+		if (conta.get().getId() == 0) {
+
+			base.statusCode = 400;
+			base.message = "Id não encontrado.";
+			return base;
+
+		}
+
+		_repository.deleteById(id);
+		base.statusCode = 200;
+		base.message = "Conta deletada.";
+		return base;
+	}
+
+	public ContaResponse saldo(String hash) {
+		ContaResponse response = new ContaResponse();
+
 		response.statusCode = 400;
-		
+
 		Conta lista = _repository.findByHash(hash);
-		if(lista == null) {
+		if (lista == null) {
 			response.message = "Conta não encontrada.";
 			return response;
 		}
-		
+
 		double saldo = _operacaoService.saldo(lista.getId());
 		response.setSaldo(saldo);
 		response.setHash(lista.getHash());
@@ -120,4 +153,3 @@ public class ContaService {
 		return response;
 	}
 }
-

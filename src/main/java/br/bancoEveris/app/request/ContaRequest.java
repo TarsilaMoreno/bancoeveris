@@ -1,8 +1,8 @@
-package br.bancoEveris.app.spec;
+package br.bancoEveris.app.request;
 
-public class ContaSpec {
+public class ContaRequest {
 
-	public String hash;
+	private String hash;
 
 	public String getHash() {
 		return hash;
@@ -11,5 +11,5 @@ public class ContaSpec {
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
-
+	
 }

@@ -7,16 +7,17 @@ import org.springframework.web.bind.annotation.*;
 
 import br.bancoEveris.app.model.BaseResponse;
 import br.bancoEveris.app.model.Conta;
+import br.bancoEveris.app.request.ContaRequest;
+import br.bancoEveris.app.response.ListContaResponse;
+import br.bancoEveris.app.response.ContaResponse;
 import br.bancoEveris.app.service.ContaService;
-import br.bancoEveris.app.spec.ContaList;
-import br.bancoEveris.app.spec.ContaSpec;
 
 @RequestMapping
 @RestController("/contas")
 public class ContaController extends BaseController {
 
 	private final ContaService _service;
-	//criar propriedade saldo 
+	
 	@Autowired
 	public ContaController(ContaService service) {
 		_service = service;
@@ -24,11 +25,11 @@ public class ContaController extends BaseController {
 	}
 
 	@PostMapping
-	public ResponseEntity inserir(@RequestBody ContaSpec contaSpec) {
+	public ResponseEntity inserir() {
 
 		try
 		{
-			BaseResponse base = _service.inserir(contaSpec);
+			BaseResponse base = _service.inserir();
 			return ResponseEntity.status(base.statusCode).body(base);
 		} catch (Exception e)
 		{
@@ -38,11 +39,11 @@ public class ContaController extends BaseController {
 	}
 	
 	@GetMapping
-	public ResponseEntity obter() {
+	public ResponseEntity listar() {
 		try
 		{
-			ContaList contas = _service.obter();			
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(contas);
+			ListContaResponse contas = _service.listar();			
+			return ResponseEntity.status(contas.statusCode).body(contas);
 		}
 		catch (Exception e)
 		{
@@ -51,12 +52,12 @@ public class ContaController extends BaseController {
 		
 	}
 	
-	@GetMapping(path="/listar/{hash}")
-	public ResponseEntity listar(@PathVariable String hash) {
+	@GetMapping(path="/obter/{id}")
+	public ResponseEntity obter(@PathVariable Long id) {
 		try
 		{
-			Conta conta = _service.obterByHash(hash);
-			return ResponseEntity.status(conta.statusCode).body(conta);
+			ContaResponse response = _service.obter(id);
+			return ResponseEntity.status(response.statusCode).body(response);
 		}
 		catch(Exception e)
 		{
@@ -64,12 +65,12 @@ public class ContaController extends BaseController {
 		}
 	}
 	
-	@PutMapping(path="/editar/{hash}")
-	public ResponseEntity editar(@RequestBody ContaSpec contaSpec, @PathVariable String hash) {
+	@PutMapping(path="/editar/{id}")
+	public ResponseEntity editar(@RequestBody ContaRequest contaRequest, @PathVariable Long id) {
 		try
 		{
-			Conta conta = _service.editar(hash, contaSpec);
-			return ResponseEntity.status(conta.statusCode).body(conta);
+			BaseResponse base = _service.editar(id, contaRequest);
+			return ResponseEntity.status(base.statusCode).body(base);
 		}
 		catch(Exception e)
 		{
@@ -77,12 +78,12 @@ public class ContaController extends BaseController {
 		}
 	}
 	
-	@DeleteMapping(path="/deletar/{hash}")
-	public ResponseEntity deletar(@PathVariable String hash) {
+	@DeleteMapping(path="/deletar/{id}")
+	public ResponseEntity deletar(@PathVariable Long id) {
 		try
 		{
-			BaseResponse conta = _service.deletar(hash);
-			return ResponseEntity.status(conta.statusCode).body(conta);
+			BaseResponse base = _service.deletar(id);
+			return ResponseEntity.status(base.statusCode).build();
 		}
 		catch(Exception e)
 		{

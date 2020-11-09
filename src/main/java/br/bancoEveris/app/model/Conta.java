@@ -13,7 +13,7 @@ public class Conta extends BaseResponse {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	//criar propriedade saldo 
+	
 
 	@Column(unique=true)
 	private String hash;

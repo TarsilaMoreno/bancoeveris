@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import br.bancoEveris.app.model.BaseResponse;
 import br.bancoEveris.app.model.Conta;
 import br.bancoEveris.app.model.Operacao;
@@ -84,7 +83,7 @@ public class OperacaoService {
 				base.message = "Valor não pode ser zero";
 				return base;
 			}
-			
+
 			Conta checkConta = _contaRepository.findByHash(operacao.getContaDestino().getHash());
 			if (checkConta == null ) {
 				base.statusCode = 400;
@@ -92,8 +91,8 @@ public class OperacaoService {
 				return base;
 			}
 			operacao.setContaDestino(checkConta);
-			
-	
+
+
 			break;
 
 		case "S":
@@ -130,4 +129,4 @@ public class OperacaoService {
 		return base;
 	}
 
-}
+} 

@@ -4,6 +4,8 @@ public class DepositoRequest {
 
 	private String hash;
 	private Double valor;
+	
+	
 	public String getHash() {
 		return hash;
 	}

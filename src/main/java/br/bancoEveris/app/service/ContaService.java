@@ -32,7 +32,6 @@ public class ContaService {
 		Conta conta = new Conta();
 		BaseResponse base = new BaseResponse();
 		String randomHash = "";
-		// substituir por um randomHash correto
 
 		boolean existe = true;
 		while (existe) {

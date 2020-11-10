@@ -68,16 +68,16 @@ public class OperacaoController extends BaseController {
 	public ResponseEntity transferencia(@RequestBody TransferenciaRequest request) {
 		try {
 
-			operacao.setTipo("S");
+			operacao.setTipo("T");
 			operacao.setValor(request.getValor());
-			if (request.getIdContaOrigem() != null) {
+			if (request.getHashOrigem() != "") {
 				Conta conta = new Conta();
-				conta.setId(request.getIdContaOrigem());
+				conta.setHash(request.getHashOrigem());
 				operacao.setContaOrigem(conta);
 			}
-			if (request.getIdContaDestino() != null) {
+			if (request.getHashDestino() != "") {
 				Conta conta = new Conta();
-				conta.setId(request.getIdContaDestino());
+				conta.setHash(request.getHashDestino());
 				operacao.setContaDestino(conta);
 			}
 

@@ -119,7 +119,7 @@ public class OperacaoService {
 
 			
 		case "T":
-			if (operacao.getContaOrigem() == null || operacao.getContaDestino() == null) {
+			if (operacao.getContaOrigem().getHash() == null || operacao.getContaDestino().getHash() == null) {
 				base.statusCode = 400;
 				base.message = "Uma das contas não foi informada";
 				return base;
@@ -129,9 +129,17 @@ public class OperacaoService {
 				base.message = "Valor não pode ser zero";
 				return base;
 			}
-			Optional<Conta> checkContaOrigem = _contaRepository.findById(operacao.getContaOrigem().getId());
-			Optional<Conta> checkContaDestino = _contaRepository.findById(operacao.getContaDestino().getId());
-			operacao.setIdContaOrigem(checkContaOrigem);
+			
+			Conta checkContaOrigem = _contaRepository.findByHash(operacao.getContaOrigem().getHash());
+			Conta checkContaDestino = _contaRepository.findByHash(operacao.getContaDestino().getHash());
+			
+			if(checkContaOrigem == null || checkContaDestino == null) {
+				base.statusCode = 400;
+				base.message = "Conta para transferência não localizada.";
+				return base;
+			}
+			
+			operacao.setContaOrigem(checkContaOrigem);
 			operacao.setContaDestino(checkContaDestino);
 			break;
 

@@ -4,27 +4,25 @@ public class TransferenciaRequest {
 
 	
 	private Double valor;
-	private Long idContaOrigem;
-	private Long idContaDestino;
-	
-	
+	private String hashOrigem;
+	private String hashDestino;
 	public Double getValor() {
 		return valor;
 	}
 	public void setValor(Double valor) {
 		this.valor = valor;
 	}
-	public Long getIdContaOrigem() {
-		return idContaOrigem;
+	public String getHashOrigem() {
+		return hashOrigem;
 	}
-	public void setIdContaOrigem(Long idContaOrigem) {
-		this.idContaOrigem = idContaOrigem;
+	public void setHashOrigem(String hashOrigem) {
+		this.hashOrigem = hashOrigem;
 	}
-	public Long getIdContaDestino() {
-		return idContaDestino;
+	public String getHashDestino() {
+		return hashDestino;
 	}
-	public void setIdContaDestino(Long idContaDestino) {
-		this.idContaDestino = idContaDestino;
+	public void setHashDestino(String hashDestino) {
+		this.hashDestino = hashDestino;
 	}
 	
 	

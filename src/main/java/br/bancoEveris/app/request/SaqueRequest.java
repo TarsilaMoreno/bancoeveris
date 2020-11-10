@@ -1,8 +1,8 @@
 package br.bancoEveris.app.request;
 
-import br.bancoEveris.app.model.BaseResponse;
 
-public class SaqueRequest extends BaseResponse {
+
+public class SaqueRequest {
 
 	private String hash;
 	private Double valor;

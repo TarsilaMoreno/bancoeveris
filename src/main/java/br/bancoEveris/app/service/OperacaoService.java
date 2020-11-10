@@ -1,6 +1,7 @@
 package br.bancoEveris.app.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,8 +107,17 @@ public class OperacaoService {
 				base.message = "Valor não pode ser zero";
 				return base;
 			}
+			
+			checkConta = _contaRepository.findByHash(operacao.getContaOrigem().getHash());
+			if (checkConta == null ) {
+				base.statusCode = 400;
+				base.message = "Conta para saque não localizada";
+				return base;
+			}
+			operacao.setContaOrigem(checkConta);
 			break;
 
+			
 		case "T":
 			if (operacao.getContaOrigem() == null || operacao.getContaDestino() == null) {
 				base.statusCode = 400;
@@ -119,6 +129,10 @@ public class OperacaoService {
 				base.message = "Valor não pode ser zero";
 				return base;
 			}
+			Optional<Conta> checkContaOrigem = _contaRepository.findById(operacao.getContaOrigem().getId());
+			Optional<Conta> checkContaDestino = _contaRepository.findById(operacao.getContaDestino().getId());
+			operacao.setIdContaOrigem(checkContaOrigem);
+			operacao.setContaDestino(checkContaDestino);
 			break;
 
 		}

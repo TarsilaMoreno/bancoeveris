@@ -70,14 +70,14 @@ public class OperacaoController extends BaseController {
 
 			operacao.setTipo("S");
 			operacao.setValor(request.getValor());
-			if (request.getHash() != "") {
+			if (request.getIdContaOrigem() != null) {
 				Conta conta = new Conta();
-				conta.setHash(request.getHash());
+				conta.setId(request.getIdContaOrigem());
 				operacao.setContaOrigem(conta);
 			}
-			if (request.getHash() != "") {
+			if (request.getIdContaDestino() != null) {
 				Conta conta = new Conta();
-				conta.setHash(request.getHash());
+				conta.setId(request.getIdContaDestino());
 				operacao.setContaDestino(conta);
 			}
 

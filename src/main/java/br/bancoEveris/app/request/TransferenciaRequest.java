@@ -2,16 +2,12 @@ package br.bancoEveris.app.request;
 
 public class TransferenciaRequest {
 
-	private String hash;
+	
 	private Double valor;
 	private Long idContaOrigem;
 	private Long idContaDestino;
-	public String getHash() {
-		return hash;
-	}
-	public void setHash(String hash) {
-		this.hash = hash;
-	}
+	
+	
 	public Double getValor() {
 		return valor;
 	}

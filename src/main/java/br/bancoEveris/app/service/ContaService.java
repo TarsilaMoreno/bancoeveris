@@ -13,6 +13,8 @@ import br.bancoEveris.app.request.ContaRequest;
 import br.bancoEveris.app.response.ListContaResponse;
 import br.bancoEveris.app.response.ContaResponse;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.time.*;
 
 @Service
@@ -33,9 +35,12 @@ public class ContaService {
 		BaseResponse base = new BaseResponse();
 		String randomHash = "";
 
+		SecureRandom random = new SecureRandom();
+        randomHash = new BigInteger(130, random).toString(32);
+		
 		boolean existe = true;
 		while (existe) {
-			randomHash = LocalDateTime.now().toString();
+			
 
 			Conta checkConta = _repository.findByHash(randomHash);
 

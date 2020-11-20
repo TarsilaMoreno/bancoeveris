@@ -13,14 +13,15 @@ import br.bancoEveris.app.request.DepositoRequest;
 import br.bancoEveris.app.request.SaqueRequest;
 import br.bancoEveris.app.request.TransferenciaRequest;
 import br.bancoEveris.app.service.OperacaoService;
+import br.bancoEveris.app.service.imp.OperacaoServiceImp;
 
 @RestController
 @RequestMapping("/operacoes")
 public class OperacaoController extends BaseController {
 	private Operacao operacao = new Operacao();
-	private OperacaoService _service;
+	private OperacaoServiceImp _service;
 
-	public OperacaoController(OperacaoService service) {
+	public OperacaoController(OperacaoServiceImp service) {
 		_service = service;
 	}
 

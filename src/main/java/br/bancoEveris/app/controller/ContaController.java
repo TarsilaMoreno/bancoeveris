@@ -1,16 +1,17 @@
 package br.bancoEveris.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.bancoEveris.app.model.BaseResponse;
-import br.bancoEveris.app.model.Conta;
+
 import br.bancoEveris.app.request.ContaRequest;
 import br.bancoEveris.app.response.ListContaResponse;
 import br.bancoEveris.app.response.ContaResponse;
 import br.bancoEveris.app.service.ContaService;
+
 
 @RequestMapping
 @RestController("/contas")

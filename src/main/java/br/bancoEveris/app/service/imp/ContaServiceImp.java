@@ -153,6 +153,10 @@ public class ContaServiceImp implements ContaService {
 		double saldo = _operacaoService.saldo(lista.getId());
 		response.setSaldo(saldo);
 		response.setHash(lista.getHash());
+		response.setId(lista.getId());
+		response.message = "Saldo atualizado!";
+		
+		
 		response.statusCode = 200;
 		return response;
 	}
